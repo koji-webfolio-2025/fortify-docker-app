@@ -1,0 +1,16 @@
+# Laravel
+/vendor
+/node_modules
+.env
+.phpunit.result.cache
+/storage/*.key
+/storage/framework/*
+/storage/logs/*
+
+# Vite / Vue
+frontend/node_modules
+frontend/dist
+
+# Docker
+docker/mysql-data
+EOF
