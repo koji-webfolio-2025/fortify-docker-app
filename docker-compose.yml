@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
   app:
@@ -9,8 +9,10 @@ services:
     working_dir: /var/www/html
     volumes:
       - ./backend:/var/www/html
+      - ./backend/storage:/var/www/html/storage
     networks:
       - fortify-net
+    user: "${UID:-1000}:${GID:-1000}"
 
   nginx:
     image: nginx:latest
@@ -20,6 +22,7 @@ services:
     volumes:
       - ./backend:/var/www/html
       - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./backend/storage:/var/www/html/storage
     depends_on:
       - app
     networks:
