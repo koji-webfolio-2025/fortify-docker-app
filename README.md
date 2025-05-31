@@ -14,7 +14,7 @@
 - Password: password
 
 ## 技術スタック
-- Laravel 10.x（Fortify/認証/Sanctum）
+- Laravel 12.x（Fortify/認証/Sanctum）
 - Vue 3.x (TypeScript, Vite)
 - Docker（nginx, php-fpm, mysql, node）
 - API認証（セッションベース）
