@@ -18,11 +18,13 @@ services:
     image: nginx:latest
     container_name: fortify-nginx
     ports:
-      - "8080:80"
+      - "80:80"
+      - "443:443"
     volumes:
-      - ./backend:/var/www/html
+      - ./frontend/dist:/usr/share/nginx/html
       - ./docker/nginx/conf.d:/etc/nginx/conf.d
       - ./backend/storage:/var/www/html/storage
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - app
     networks:
