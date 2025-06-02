@@ -6,8 +6,8 @@
 - 本番応募・ポートフォリオ想定の「実案件ミニマム構成」例。
 
 ## 本番デモURL
-- フロントエンド: http://153.126.164.246:5173/
-- APIサーバー: http://153.126.164.246:8080/
+- フロントエンド: https://spa.codeshift-lab.com
+- APIサーバー: https://api.codeshift-lab.com
 
 ## サンプルユーザー
 - Email: test@example.com
