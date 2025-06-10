@@ -22,4 +22,3 @@ jobs:
           script: |
             cd /apps/fortify-docker-app
             git pull
-            docker-compose up -d --build
