@@ -1,0 +1,34 @@
+name: Deploy Laravel API to VPS
+
+on:
+  push:
+    branches:
+      - main   # 反映したいブランチ名
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH & Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_DEPLOY_KEY }}
+          port: 22
+          script: |
+            # 本番API用ディレクトリに移動
+            cd /var/www/api-portfolio
+            # 最新コミットをpull
+            git pull origin main
+            # Composerで依存解決
+            composer install --no-dev --optimize-autoloader
+            # DBマイグレーション
+            # php artisan migrate --force
+            # キャッシュクリア＆再生成
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            # パーミッション調整
+            chown -R www-data:www-data storage bootstrap/cache
+
