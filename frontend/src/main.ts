@@ -4,7 +4,7 @@ import App from './App.vue'
 import router from './views/router'
 import axios from 'axios'
 
-axios.defaults.baseURL = '/'
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
 axios.defaults.withCredentials = true //（クッキー送信）
 
 const app = createApp(App)
