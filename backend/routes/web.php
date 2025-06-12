@@ -15,3 +15,7 @@ Route::middleware(['web', 'auth'])->get('/api/user', function (Request $request)
         'user'    => auth()->user(),
     ]);
 });
+
+Route::post('/test-post', function(Request $req) {
+    return response()->json(['ok' => true, 'all' => $req->all()]);
+});
