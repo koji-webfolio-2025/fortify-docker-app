@@ -4,6 +4,10 @@ import App from './App.vue'
 import router from './views/router'
 import axios from 'axios'
 
+declare global {
+    interface Window { axios: typeof axios }
+}
+
 window.axios = axios
 
 //axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
