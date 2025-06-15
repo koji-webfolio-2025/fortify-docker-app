@@ -10,7 +10,7 @@
           <label for="password">パスワード</label>
           <input id="password" v-model="password" type="password" required />
         </div>
-        <button type="submit">ログインテスト</button>
+        <button type="submit">ログイン</button>
         <div v-if="error" class="error">{{ error }}</div>
       </form>
     </div>
