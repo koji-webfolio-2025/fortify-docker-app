@@ -26,5 +26,5 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_DEPLOY_KEY }}
           port: 22
-          source: "frontend/dist/"
+          source: "frontend/dist/."
           target: "/var/www/spa-portfolio/dist/"
