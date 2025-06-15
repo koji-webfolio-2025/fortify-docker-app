@@ -56,3 +56,8 @@ cp .env.example .env
 npm install
 npm run dev
 # → http://localhost:5173 でSPA確認
+
+## 本番デプロイ構成
+- 本番SPAの静的ファイル（dist）は VPSサーバ `/var/www/spa-portfolio/dist/` 配置が唯一の配信ディレクトリ
+- GitHub Actions（CI/CD）で `frontend/dist/*` を `/var/www/spa-portfolio/dist/` へ自動上書きデプロイ
+- サーバroot, nginx設定も `/var/www/spa-portfolio/dist` 配下のみ参照
