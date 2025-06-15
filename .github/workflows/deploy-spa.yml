@@ -28,3 +28,4 @@ jobs:
           port: 22
           source: "."
           target: "/var/www/spa-portfolio/dist/"
+        working-directory: ./frontend/dist
