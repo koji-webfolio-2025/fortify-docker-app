@@ -20,13 +20,12 @@ jobs:
         working-directory: ./frontend
         run: npm run build
 
-      - name: Deploy dist contents to VPS
-        uses: appleboy/rsync-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_DEPLOY_KEY }}
-          port: 22
-          source: "frontend/dist/"
-          target: "/var/www/spa-portfolio/dist/"
-          args: -avz --delete
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_DEPLOY_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+      - name: Deploy dist contents to VPS via rsync
+        run: |
+          rsync -avz --delete -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" frontend/dist/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/spa-portfolio/dist/
