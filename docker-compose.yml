@@ -18,8 +18,8 @@ services:
     image: nginx:latest
     container_name: fortify-nginx
     ports:
-      - "80:80"
-      - "443:443"
+      - "8081:80"
+      - "8443:443"
     volumes:
       - ./frontend/dist:/usr/share/nginx/html
       - ./docker/nginx/conf.d:/etc/nginx/conf.d
@@ -39,7 +39,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
