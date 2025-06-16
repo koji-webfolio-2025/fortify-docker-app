@@ -1,6 +1,6 @@
 <template>
     <div class="login-container">
-      <h2>ログイン</h2>
+      <h2>ログイン01</h2>
       <form @submit.prevent="handleLogin">
         <div>
           <label for="email">メールアドレス</label>
@@ -10,7 +10,7 @@
           <label for="password">パスワード</label>
           <input id="password" v-model="password" type="password" required />
         </div>
-        <button type="submit">ログインテスト3</button>
+        <button type="submit">ログイン</button>
         <div v-if="error" class="error">{{ error }}</div>
       </form>
     </div>
