@@ -3,7 +3,7 @@ name: Deploy Laravel API to VPS
 on:
   push:
     branches:
-      - main   # 反映したいブランチ名
+      - main
 
 jobs:
   deploy:
@@ -18,14 +18,15 @@ jobs:
           port: 22
           script: |
             # 本番API用ディレクトリに移動
-            cd /var/www/api-portfolio
+            cd /apps/fortify-docker-app/backend
             # 最新コミットをpull
             git pull origin main
             # Composerで依存解決
             composer install --no-dev --optimize-autoloader
-            # DBマイグレーション
+            # 必要に応じてマイグレーション
             # php artisan migrate --force
             # キャッシュクリア＆再生成
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
+            docker-compose restart
