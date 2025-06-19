@@ -31,9 +31,11 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             SubstituteBindings::class,
+            \App\Http\Middleware\ForceSameSiteNone::class,
         ],
 
         'api' => [
+            \App\Http\Middleware\ForceSameSiteNone::class,
             // SPA のクッキー認証を有効化
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',

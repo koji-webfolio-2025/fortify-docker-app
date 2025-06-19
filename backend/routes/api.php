@@ -18,3 +18,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // ヘルスチェック
 Route::get('/ping', fn() => response()->json(['pong']));
+
+Route::get('/test-cookie', function () {
+    return response('ok')
+        ->cookie(
+            'test_samesite_none',
+            'test_value',
+            60,
+            '/',
+            '.codeshift-lab.com',
+            true,   // Secure
+            false,  // HttpOnly
+            false,  // raw
+            'None'  // SameSite
+        );
+});

@@ -19,3 +19,18 @@ Route::middleware(['web', 'auth'])->get('/api/user', function (Request $request)
 Route::post('/test-post', function(Request $req) {
     return response()->json(['ok' => true, 'all' => $req->all()]);
 });
+
+Route::get('/test-cookie', function () {
+    return response('ok')
+        ->cookie(
+            'test_samesite_none',
+            'test_value',
+            60, // 分
+            '/',
+            '.codeshift-lab.com',
+            true,   // Secure
+            false,  // HttpOnly
+            false,  // raw
+            'None'  // SameSite
+        );
+});

@@ -23,6 +23,12 @@
   const email = ref('')
   const password = ref('')
   const error = ref('')
+
+  function getCookie(name: string) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()!.split(';').shift();
+  }
   
   const handleLogin = async () => {
     error.value = ''
@@ -31,7 +37,12 @@
       await axios.post('/login', {
         email: email.value,
         password: password.value,
-      })
+      },{
+      headers: {
+        // XSRF-TOKENを明示的に付与（自動で付与されない場合の対策）
+        'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN') ?? '')
+      }
+    })
       window.location.href = '/user'
     } catch (e: any) {
       error.value = e.response?.data?.message || 'ログインに失敗しました'
