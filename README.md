@@ -1,37 +1,47 @@
 # 勤怠管理ミニアプリ（Laravel + Vue3 + TypeScript + Docker構成）
 
-## 概要
-- Laravel (Fortify認証) + Vue3 + TypeScript + Docker の統合開発環境
-- SPAによるログイン、ユーザー情報取得、セッション認証対応
-- ポートフォリオ・実案件応募向けの最小構成例
+本リポジトリは、**本番さながらのSPA+APIサブドメイン分離認証アプリ**を、  
+**Docker＋Nginx＋SSL＋GitHub Actions（CI/CD）で自動デプロイ**まで一気通貫で実現したテンプレートです。
 
-## 本番デモURL
-- フロントエンド: https://spa.codeshift-lab.com
-- APIサーバー: https://api.codeshift-lab.com
+---
 
-## サンプルユーザー
-- Email: test@example.com
-- Password: password
+## 📢 デモ・サンプルユーザー
 
-## 技術スタック
-- Laravel 12.x（Fortify/認証/Sanctum）
-- Vue 3.x (TypeScript, Vite)
-- Docker（nginx, php-fpm, mysql, node）
-- API認証（セッションベース）
-- GitHub Actions（CI/CD対応自動デプロイ）
+- **SPA本番デモ:** [https://spa.codeshift-lab.com](https://spa.codeshift-lab.com)
+- **API本番:** [https://api.codeshift-lab.com](https://api.codeshift-lab.com)
+- **サンプルユーザー**
+    - Email: `test@example.com`
+    - Password: `password`
+
+---
+
+## 🛠 技術スタック
+
+- **Laravel 12.x**（Fortify認証／Sanctum／API／MySQL）
+- **Vue 3.x**（TypeScript, Vite, SPA構成）
+- **Docker**（nginx, php-fpm, mysql, node）
+- **CI/CD:** GitHub Actions（自動デプロイ、docker-compose再起動）
+- **SSL:** Let's Encrypt（Nginx/サブドメイン運用）
+
+---
+
+## 🗂 ディレクトリ構成（抜粋）
+
+- apps/
+- fortify-docker-app/
+- backend/ # Laravel API（Fortify認証・Sanctum対応）
+- frontend/ # Vue3 SPA（TypeScript + Vite）
+- docker/ # Nginx/PHP/MySQL/Docker設定
+- www/
+- spa-portfolio/ # デプロイ済みSPA静的ファイル
+- portfolio-attendance/ # 勤怠管理アプリ
+- portfolio-flea-market/ # フリマアプリ
 
 ## 機能一覧
 - ログイン/ログアウト
 - ユーザー情報取得・表示
 - 未ログイン時リダイレクト（ルートガード）
 - SPA+APIサーバー分離運用
-
-## ディレクトリ構成（抜粋）
-- apps/
-- fortify-docker-app/
-- backend/ # Laravel API
-- frontend/ # Vue3 SPA
-- docker/ # Docker設定
 
 ## ローカル開発・起動方法
 
@@ -59,33 +69,36 @@ npm run dev
 ```
 
 ## 本番デプロイ構成
-- 本番SPAの静的ファイル（dist）は VPSサーバ `/var/www/spa-portfolio/dist/` 配置が唯一の配信ディレクトリ
-- GitHub Actions（CI/CD）で `frontend/dist/*` を `/var/www/spa-portfolio/dist/` へ自動上書きデプロイ
-- サーバroot, nginx設定も `/var/www/spa-portfolio/dist` 配下のみ参照
+- SPAビルド成果物（dist） → /var/www/spa-portfolio/dist/
+- APIサーバー → /apps/fortify-docker-app/backend
+- GitHub ActionsでCI/CD自動化（SPA静的ファイルを本番サーバーに自動上書き）
+- Nginx/SSL/サブドメイン設定もDockerイメージに組み込み済み
 
 # サブドメインSPA＋API構成テンプレ（Vue3 + Laravel + Docker）
+flowchart LR
+    A[Vue3 SPA<br>https://spa.codeshift-lab.com] --API通信/認証--> B[Laravel API<br>https://api.codeshift-lab.com]
+    B --セッションクッキー/Sanctum--> A
 
-## 概要
-- 本構成はVue3 SPA（TypeScript）とLaravel API（Fortify/Sanctum認証）をDocker＋Nginx＋SSL（Let's Encrypt）で運用
-- SPA, API, 管理画面…全てサブドメイン単位で分離可能
-- 本番環境の自動デプロイにGitHub Actionsを使用
+## 🚧 よくあるハマりポイント・FAQ
 
-## 構成図
-- [spa.codeshift-lab.com] → Vue3 SPA（ビルド済み静的ファイル配信）
-- [api.codeshift-lab.com] → Laravel API（Fortify認証/CSRF対策/セッション運用）
+| 症状                         | 主な原因                              | 解決策・チェックポイント                               |
+|------------------------------|---------------------------------------|--------------------------------------------------------|
+| 419: CSRF token mismatch     | SPA→APIのCSRFヘッダ自動付与ミス       | `X-XSRF-TOKEN` を**手動でヘッダ付与**                  |
+| Cookieが送られない           | `.env`のSESSION_SAME_SITE設定ミス     | `.env`で `SESSION_SAME_SITE=None` を**必ず明記**       |
+| Actionsのデプロイ失敗        | ディレクトリ構成やパス指定の不一致    | デプロイ先のパス・本番ディレクトリを**一致させる**      |
+| Cookieドメイン不一致         | `.env`のSESSION_DOMAINの設定ミス      | `.env`で `SESSION_DOMAIN=.codeshift-lab.com` を指定     |
+| ブラウザでログイン状態が飛ぶ | Dockerや.env反映漏れ・キャッシュ残存  | `docker-compose restart`やブラウザのCookie全削除       |
+| POSTがCORSエラー             | CORS/Cookie設定・Nginx漏れ            | Nginx/axiosで`withCredentials`とCORS設定を再点検       |
 
-## 認証方式のハマりポイントと対策
-- CSRF token mismatch対策：SPA→API連携時、`X-XSRF-TOKEN`を明示的にヘッダ付与
-- .env：`SESSION_SAME_SITE=None` を**必ず明記**
-- Docker再起動でenv・設定の反映漏れ防止
+---
 
-## 開発・運用Tips
-- サーバー構築・SSL・Nginx設定もテンプレート化
-- 複数アプリを同時運用可能
-- CI/CDによる自動反映、デプロイ時のサービス一時停止防止策も解説
+### 📝 補足解説
 
-## 詳細手順・FAQ
-- よくあるエラーと解決策
-  - 419: Cookie/SameSite/ヘッダ/CORS全部を点検せよ！
-  - Actions失敗: デプロイ先パスと本番ディレクトリを一致させよ！
-- ディレクトリ構成・ボリューム管理・Nginxの具体例も付属
+- **CSRF token mismatch**  
+  → axiosの`withCredentials: true`でも自動付与されない場合、手動で`X-XSRF-TOKEN`ヘッダを付与すると確実です。
+- **SESSION_SAME_SITE**  
+  → クロスドメイン運用時は`None`を必ず明記。SSL環境必須です。
+- **デプロイ失敗**  
+  → GitHub ActionsやSCPの「cd先」や「Gitリポジトリのルート」が現状と合っているかを常に確認。
+
+---
