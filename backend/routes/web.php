@@ -34,3 +34,7 @@ Route::get('/test-cookie', function () {
             'None'  // SameSite
         );
 });
+
+Route::get('/', function () {
+    return view('welcome');
+});

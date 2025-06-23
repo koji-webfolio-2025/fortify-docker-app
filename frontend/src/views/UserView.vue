@@ -21,6 +21,7 @@
   onMounted(async () => {
     try {
       const res = await axios.get('/api/user')
+      console.log('APIレスポンス:', res.data)
       user.value = res.data
     } catch {
       user.value = null

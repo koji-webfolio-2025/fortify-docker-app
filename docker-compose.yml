@@ -17,9 +17,9 @@ services:
   nginx:
     image: nginx:latest
     container_name: fortify-nginx
-    ports:
-      - "8081:80"
-      - "8443:443"
+    #ports:
+    #  - "80:80"
+    #  - "443:443"
     volumes:
       - ./backend:/var/www/html 
       - ./frontend/dist:/usr/share/nginx/html
