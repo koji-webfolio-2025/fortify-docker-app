@@ -8,6 +8,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/memos', [\App\Http\Controllers\MemoController::class, 'index']);
+    Route::post('/memos', [\App\Http\Controllers\MemoController::class, 'store']);
+});
+
 // ヘルスチェック
 Route::get('/ping', fn() => response()->json(['pong']));
 
