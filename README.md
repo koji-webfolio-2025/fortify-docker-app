@@ -1,7 +1,7 @@
-# 勤怠管理ミニアプリ（Laravel + Vue3 + TypeScript + Docker構成）
+# 日報・メモ管理ミニアプリ（Laravel + Vue3 + TypeScript + Docker構成）
 
-本リポジトリは、**本番さながらのSPA+APIサブドメイン分離認証アプリ**を、  
-**Docker＋Nginx＋SSL＋GitHub Actions（CI/CD）で自動デプロイ**まで一気通貫で実現したテンプレートです。
+本リポジトリは、本番サブドメイン分離（SPA＋API）でCSRF/CORS/セッションも突破した日報・メモ管理アプリを、
+Docker＋Nginx＋SSL＋GitHub Actions（CI/CD）で自動デプロイまで一気通貫で構築した実践テンプレです。
 
 ---
 
@@ -41,7 +41,7 @@
 - ログイン/ログアウト
 - ユーザー情報取得・表示
 - 未ログイン時リダイレクト（ルートガード）
-- SPA+APIサーバー分離運用
+- SPA+APIサーバー分離運用（CORS/CSRF/セッション対応済）
 
 ## ローカル開発・起動方法
 
