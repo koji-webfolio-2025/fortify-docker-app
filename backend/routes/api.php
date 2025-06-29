@@ -4,33 +4,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['web', 'auth'])->group(function () {
+    Route::get('/user', function (Request $request) {
+        \Log::info('API_HEADERS', ['user' => $request->user()]);
+        return $request->user();
+    });
     Route::get('/memos', [\App\Http\Controllers\MemoController::class, 'index']);
     Route::post('/memos', [\App\Http\Controllers\MemoController::class, 'store']);
 });
 
-// ヘルスチェック
-Route::get('/ping', fn() => response()->json(['pong']));
-
-Route::get('/test-cookie', function () {
-    return response('ok')
-        ->cookie(
-            'test_samesite_none',
-            'test_value',
-            60,
-            '/',
-            '.codeshift-lab.com',
-            true,   // Secure
-            false,  // HttpOnly
-            false,  // raw
-            'None'  // SameSite
-        );
-});
-
-Route::get('/', function () {
-    return response()->json(['status' => 'ok']);
+Route::get('/test-log', function () {
+    \Log::info('★★TEST LOG ROUTE HIT★★');
+    return ['ok'];
 });

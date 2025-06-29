@@ -33,7 +33,7 @@
   const handleLogin = async () => {
     error.value = ''
     try {
-      await axios.get('/sanctum/csrf-cookie') // CSRFトークン取得
+      await axios.get('/sanctum/csrf-cookie',{ withCredentials: true }) // CSRFトークン取得
       await axios.post('/login', {
         email: email.value,
         password: password.value,

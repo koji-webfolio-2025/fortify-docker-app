@@ -10,6 +10,7 @@ class MemoController extends Controller
     // 一覧取得（認証ユーザーのメモのみ）
     public function index(Request $request)
     {
+        \Log::info('MEMOS_INDEX: user=', ['user' => auth()->user()]);
         return $request->user()
             ->memos()
             ->orderByDesc('created_at')
@@ -19,6 +20,7 @@ class MemoController extends Controller
     // 新規作成
     public function store(Request $request)
     {
+        \Log::info('MEMOS_INDEX: user=', ['user' => auth()->user()]);
         $data = $request->validate([
             'title'   => 'required|string|max:100',
             'content' => 'required|string',

@@ -58,12 +58,24 @@ async function fetchMemos() {
   memos.value = res.data
 }
 
+// CookieからXSRF-TOKENを取得する関数を追加
+function getCookie(name: string) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()!.split(';').shift();
+}
+
 // 新規登録
 async function submitMemo() {
   if (!form.value.title || !form.value.content) return
   try {
-    const res = await axios.post('/api/memos', form.value)
-    // 先頭に追加（最新順）
+    // 必要ならPOST直前にCSRFトークンを明示付与
+    const res = await axios.post('/api/memos', form.value, {
+      withCredentials: true,
+      headers: {
+        'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN') ?? '')
+      }
+    })
     memos.value.unshift(res.data)
     form.value.title = ''
     form.value.content = ''

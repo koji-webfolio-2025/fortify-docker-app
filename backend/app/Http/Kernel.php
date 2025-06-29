@@ -35,6 +35,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            \App\Http\Middleware\ApiDebugLogger::class, 
             \App\Http\Middleware\ForceSameSiteNone::class,
             // SPA のクッキー認証を有効化
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
